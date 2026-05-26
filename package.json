@@ -1,0 +1,47 @@
+{
+  "name": "sherpa-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Smart-contract spend guardrails for autonomous agents on Arc Testnet with x402-aware policy checks.",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "wallets:demo": "tsx scripts/create-demo-wallets.ts",
+    "arc:check": "tsx scripts/check-arc.ts",
+    "live:ready": "tsx scripts/live-readiness.ts",
+    "testnet:status": "tsx scripts/testnet-status.ts",
+    "testnet:deploy": "forge script packages/contracts/script/DeployArc.s.sol:DeployArc --root packages/contracts --rpc-url arc_testnet --broadcast",
+    "testnet:configure": "forge script packages/contracts/script/ConfigureDemo.s.sol:ConfigureDemo --root packages/contracts --rpc-url arc_testnet --broadcast",
+    "testnet:fund": "bash -lc 'set -a; source .env; set +a; cast send \"$ARC_USDC_ADDRESS\" \"transfer(address,uint256)\" \"$SPEND_ACCOUNT_ADDRESS\" \"$DEMO_FUND_AMOUNT_BASE_UNITS\" --rpc-url \"$ARC_TESTNET_RPC_URL\" --private-key \"$DEPLOYER_PRIVATE_KEY\"'",
+    "testnet:agent": "bash -lc 'set -a; source .env; set +a; pnpm --filter @sherpa-agent/demo-agent start'",
+    "testnet:dashboard": "bash -lc 'set -a; source .env; set +a; pnpm --filter @sherpa-agent/dashboard dev'",
+    "contracts:build": "forge build --root packages/contracts",
+    "contracts:test": "forge test --root packages/contracts",
+    "contracts:coverage": "forge coverage --root packages/contracts"
+  },
+  "keywords": [
+    "ai-agents",
+    "arc",
+    "usdc",
+    "x402",
+    "smart-contracts",
+    "spend-controls"
+  ],
+  "author": "gnanam (@gnanam1990)",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "viem": "^2.51.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.25",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.22.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0",
+    "vitest": "^4.1.7"
+  },
+  "packageManager": "pnpm@9.15.9"
+}
