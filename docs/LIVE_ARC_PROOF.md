@@ -49,10 +49,10 @@ Production dashboard:
 https://sherpa-agent-mu.vercel.app
 
 Immutable production deployment:
-https://sherpa-agent-43y7finkc-gnanam1990s-projects.vercel.app
+https://sherpa-agent-ph3bq9lw1-gnanam1990s-projects.vercel.app
 
 Vercel inspection:
-https://vercel.com/gnanam1990s-projects/sherpa-agent/5zpAsQa1Tmt43PcUzyXbnWENta9B
+https://vercel.com/gnanam1990s-projects/sherpa-agent/9RYeAEiZrYrDa1ezehtjwpNme7c2
 ```
 
 The dashboard build is configured with:
