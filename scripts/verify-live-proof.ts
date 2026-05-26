@@ -1,12 +1,9 @@
 import {
   ARC_TESTNET,
-  arcTestnet,
   createGuardrailsClient,
   formatUsdc,
-  type AuditEvent,
   type HexAddress,
 } from "../packages/guardrails/src/index.js";
-import { createPublicClient, http } from "viem";
 
 const spendAccount = (
   process.env.SPEND_ACCOUNT_ADDRESS ??
@@ -21,22 +18,17 @@ const expectedTransactions = new Set([
   "0x8960173ed5f6a82cb49ca44377650219ec11c9de5b9be77a9b685b844d2e6da3",
 ]);
 
-const logRange = 9_000n;
-
 async function main() {
   const rpcUrl = process.env.ARC_TESTNET_RPC_URL ?? ARC_TESTNET.rpcUrl;
   const client = createGuardrailsClient({
     accountAddress: spendAccount,
     rpcUrl,
   });
-  const publicClient = createPublicClient({
-    chain: arcTestnet,
-    transport: http(rpcUrl),
-  });
 
-  const state = await client.state();
-  const latestBlock = await publicClient.getBlockNumber();
-  const events = await readEventsInChunks(client, latestBlock);
+  const [state, events] = await Promise.all([
+    client.state(),
+    client.auditEvents({ fromBlock }),
+  ]);
 
   console.log("Sherpa Agent live proof");
   console.log(`SpendAccount: ${spendAccount}`);
@@ -61,19 +53,6 @@ async function main() {
   if (missing.length > 0) {
     throw new Error(`Missing expected proof transaction(s): ${missing.join(", ")}`);
   }
-}
-
-async function readEventsInChunks(
-  client: ReturnType<typeof createGuardrailsClient>,
-  latestBlock: bigint,
-) {
-  const events: AuditEvent[] = [];
-  for (let start = fromBlock; start <= latestBlock; start += logRange + 1n) {
-    const end = start + logRange > latestBlock ? latestBlock : start + logRange;
-    events.push(...(await client.auditEvents({ fromBlock: start, toBlock: end })));
-  }
-
-  return events;
 }
 
 main().catch((error: unknown) => {
