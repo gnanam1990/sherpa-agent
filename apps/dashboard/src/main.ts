@@ -169,7 +169,7 @@ function render(model: DashboardModel) {
     <main class="shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Sherpa Guardrails</p>
+          <p class="eyebrow">Sherpa Agent</p>
           <h1>Agent Spend Control Plane</h1>
         </div>
         <div class="mode-stack">
@@ -299,7 +299,7 @@ function loadingShell() {
     <main class="shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Sherpa Guardrails</p>
+          <p class="eyebrow">Sherpa Agent</p>
           <h1>Loading control plane</h1>
         </div>
         <span class="status-pill">Loading</span>

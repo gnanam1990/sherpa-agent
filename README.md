@@ -1,8 +1,28 @@
 # Sherpa Agent
 
+**Live:** https://sherpa-agent-mu.vercel.app
+**Repo:** https://github.com/gnanam1990/sherpa-agent
+**Proof:** `docs/LIVE_ARC_PROOF.md`
+
 Sherpa Agent is a smart-contract-backed spend manager for autonomous AI agents.
 It gives an agent a real Arc Testnet USDC budget with daily caps,
 per-counterparty caps, x402-aware payment checks, and public audit logs.
+
+## Live Arc Proof
+
+| Item | Value |
+| --- | --- |
+| Chain | Arc Testnet `5042002` |
+| SpendAccount | `0x78E7F4a3e06997D5f2EEF35db20bD85C626EC60A` |
+| Approved spend | `0x5549b9682b76b2069d462c06aab99b0521cd75835cefab15886f031b3323f5d0` |
+| Rejected overrun | `0x08a950e7461c1862ea97b4e3825348e2767e27b5fdd8fc5fdd7303c65e88cfaf` |
+| Rejected blocked vendor | `0x8960173ed5f6a82cb49ca44377650219ec11c9de5b9be77a9b685b844d2e6da3` |
+
+Verify the same proof from Arc RPC:
+
+```bash
+pnpm proof:verify
+```
 
 ## Demo Loop
 
@@ -16,11 +36,12 @@ Operator sets caps
 
 ## Sprint Target
 
-- Arc Testnet cap-accounting contract
-- TypeScript SDK for agent frameworks
-- x402 guardrail helpers
-- Demo agent that spends inside a cap and triggers rejections
-- Dashboard connected to a deployed SpendAccount
+- [x] Arc Testnet cap-accounting contract
+- [x] TypeScript SDK for agent frameworks
+- [x] x402 guardrail helpers
+- [x] Demo agent that spends inside a cap and triggers rejections
+- [x] Dashboard connected to a deployed SpendAccount
+- [ ] Demo video and final launch polish
 
 ## Repository Layout
 

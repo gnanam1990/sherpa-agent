@@ -74,7 +74,7 @@ async function main() {
 }
 
 function printHeader(dryRun: boolean) {
-  console.log("Sherpa Guardrails demo agent");
+  console.log("Sherpa Agent demo agent");
   console.log(`Target chain: Arc Testnet (${ARC_TESTNET.chainId})`);
   console.log(`Mode: ${dryRun ? "dry-run preview" : "live contract spend"}`);
   console.log("");

@@ -1,6 +1,6 @@
 # Sherpa API
 
-Backend surface for the Sherpa Guardrails product.
+Backend surface for the Sherpa Agent product.
 
 Run locally:
 

@@ -1,6 +1,6 @@
 # Dashboard
 
-The dashboard is the public audit surface for Sherpa Guardrails.
+The dashboard is the public audit surface for Sherpa Agent.
 
 Current checkpoint mode:
 

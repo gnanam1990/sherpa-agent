@@ -66,7 +66,7 @@ export function handleApiRequest(
       return ok({
         ok: true,
         service: "@sherpa-agent/api",
-        product: "Sherpa Guardrails",
+        product: "Sherpa Agent",
       });
     }
 

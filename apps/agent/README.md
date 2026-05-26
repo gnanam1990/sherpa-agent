@@ -1,6 +1,6 @@
 # Demo Agent
 
-The demo agent shows the core Sherpa Guardrails story:
+The demo agent shows the core Sherpa Agent story:
 
 ```text
 Spend 8 USDC -> approved
