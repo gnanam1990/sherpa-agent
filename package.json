@@ -11,6 +11,7 @@
     "wallets:demo": "tsx scripts/create-demo-wallets.ts",
     "arc:check": "tsx scripts/check-arc.ts",
     "live:ready": "tsx scripts/live-readiness.ts",
+    "proof:verify": "tsx scripts/verify-live-proof.ts",
     "testnet:status": "tsx scripts/testnet-status.ts",
     "testnet:deploy": "forge script packages/contracts/script/DeployArc.s.sol:DeployArc --root packages/contracts --rpc-url arc_testnet --broadcast",
     "testnet:configure": "forge script packages/contracts/script/ConfigureDemo.s.sol:ConfigureDemo --root packages/contracts --rpc-url arc_testnet --broadcast",
