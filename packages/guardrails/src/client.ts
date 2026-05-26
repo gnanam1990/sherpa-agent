@@ -24,6 +24,8 @@ import type {
   SpendResult,
 } from "./types.js";
 
+const DEFAULT_EVENT_LOG_RANGE = 9_000n;
+
 export class GuardrailsClient {
   readonly accountAddress: HexAddress;
   readonly publicClient: PublicClient;
@@ -195,25 +197,41 @@ export class GuardrailsClient {
   }
 
   async auditEvents(query: AuditEventQuery = {}): Promise<AuditEvent[]> {
-    const fromBlock = query.fromBlock ?? 0n;
-    const toBlock = query.toBlock ?? "latest";
+    const latestBlock =
+      query.toBlock === "latest" || query.toBlock === undefined
+        ? await this.publicClient.getBlockNumber()
+        : query.toBlock;
+    const ranges = planEventLogRanges({
+      fromBlock: query.fromBlock,
+      toBlock: query.toBlock,
+      latestBlock,
+      maxBlockRange: query.maxBlockRange,
+    });
 
-    const [executed, rejected] = await Promise.all([
-      this.publicClient.getContractEvents({
-        address: this.accountAddress,
-        abi: spendAccountAbi,
-        eventName: "SpendExecuted",
-        fromBlock,
-        toBlock,
+    const eventPages = await Promise.all(
+      ranges.map(async (range) => {
+        const [executed, rejected] = await Promise.all([
+          this.publicClient.getContractEvents({
+            address: this.accountAddress,
+            abi: spendAccountAbi,
+            eventName: "SpendExecuted",
+            fromBlock: range.fromBlock,
+            toBlock: range.toBlock,
+          }),
+          this.publicClient.getContractEvents({
+            address: this.accountAddress,
+            abi: spendAccountAbi,
+            eventName: "SpendRejected",
+            fromBlock: range.fromBlock,
+            toBlock: range.toBlock,
+          }),
+        ]);
+
+        return { executed, rejected };
       }),
-      this.publicClient.getContractEvents({
-        address: this.accountAddress,
-        abi: spendAccountAbi,
-        eventName: "SpendRejected",
-        fromBlock,
-        toBlock,
-      }),
-    ]);
+    );
+    const executed = eventPages.flatMap((page) => page.executed);
+    const rejected = eventPages.flatMap((page) => page.rejected);
 
     const approvedEvents = executed.map((event) => {
       const args = event.args as {
@@ -274,6 +292,49 @@ export function createGuardrailsClient(config: GuardrailsClientConfig): Guardrai
 
 export function actionToBytes32(action: string): `0x${string}` {
   return keccak256(toBytes(action));
+}
+
+export type EventLogRangePlan = {
+  fromBlock?: bigint;
+  toBlock?: bigint | "latest";
+  latestBlock: bigint;
+  maxBlockRange?: bigint;
+};
+
+export function planEventLogRanges({
+  fromBlock,
+  toBlock,
+  latestBlock,
+  maxBlockRange = DEFAULT_EVENT_LOG_RANGE,
+}: EventLogRangePlan) {
+  if (maxBlockRange <= 0n) {
+    throw new Error("maxBlockRange must be greater than zero");
+  }
+
+  const resolvedToBlock = toBlock === "latest" || toBlock === undefined
+    ? latestBlock
+    : toBlock;
+  const resolvedFromBlock =
+    fromBlock ?? (resolvedToBlock > maxBlockRange ? resolvedToBlock - maxBlockRange : 0n);
+
+  if (resolvedFromBlock > resolvedToBlock) {
+    return [];
+  }
+
+  const ranges: Array<{ fromBlock: bigint; toBlock: bigint }> = [];
+  for (
+    let start = resolvedFromBlock;
+    start <= resolvedToBlock;
+    start += maxBlockRange + 1n
+  ) {
+    const end =
+      start + maxBlockRange > resolvedToBlock
+        ? resolvedToBlock
+        : start + maxBlockRange;
+    ranges.push({ fromBlock: start, toBlock: end });
+  }
+
+  return ranges;
 }
 
 function requireArg<T>(value: T | undefined, name: string): T {

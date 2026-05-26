@@ -81,4 +81,5 @@ export type AuditEvent = {
 export type AuditEventQuery = {
   fromBlock?: bigint;
   toBlock?: bigint | "latest";
+  maxBlockRange?: bigint;
 };

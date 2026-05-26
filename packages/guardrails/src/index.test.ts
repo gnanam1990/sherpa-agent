@@ -5,6 +5,7 @@ import {
   arcTestnet,
   decodeRejectionReason,
   formatUsdc,
+  planEventLogRanges,
   parseUsdc,
 } from "./index.js";
 
@@ -43,5 +44,31 @@ describe("contract mappings", () => {
 
   it("hashes human action labels to bytes32 tags", () => {
     expect(actionToBytes32("api_call")).toMatch(/^0x[0-9a-f]{64}$/);
+  });
+});
+
+describe("event log range planning", () => {
+  it("chunks ranges under Arc RPC getLogs limits", () => {
+    expect(
+      planEventLogRanges({
+        fromBlock: 10n,
+        toBlock: 25n,
+        latestBlock: 25n,
+        maxBlockRange: 5n,
+      }),
+    ).toEqual([
+      { fromBlock: 10n, toBlock: 15n },
+      { fromBlock: 16n, toBlock: 21n },
+      { fromBlock: 22n, toBlock: 25n },
+    ]);
+  });
+
+  it("defaults to the latest safe window when no fromBlock is provided", () => {
+    expect(
+      planEventLogRanges({
+        latestBlock: 100n,
+        maxBlockRange: 10n,
+      }),
+    ).toEqual([{ fromBlock: 90n, toBlock: 100n }]);
   });
 });

@@ -5,6 +5,7 @@ export {
   GuardrailsClient,
   actionToBytes32,
   createGuardrailsClient,
+  planEventLogRanges,
 } from "./client.js";
 export { decodeRejectionReason, rejectionReasons } from "./reasons.js";
 export type {
