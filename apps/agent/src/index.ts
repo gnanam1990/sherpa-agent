@@ -8,11 +8,10 @@ import {
 import {
   demoPaymentIntents,
   parsePaymentIntent,
-  runIntentFlow,
 } from "@sherpa-agent/intent";
-import { createDemoPolicy } from "@sherpa-agent/policy";
 import { isAddress } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+import { buildDryRunSummary } from "./dry-run.js";
 
 const SAMPLE_COUNTERPARTY =
   "0x000000000000000000000000000000000000dEaD" as HexAddress;
@@ -92,9 +91,8 @@ function runDryDemo() {
   console.log("  remaining today:  50 USDC");
   console.log("");
 
-  const policy = createDemoPolicy();
-  for (const input of demoPaymentIntents) {
-    const flow = runIntentFlow(policy, input);
+  const summary = buildDryRunSummary();
+  for (const flow of summary.flows) {
     console.log(`Intent: ${flow.input}`);
     console.log(
       `  agent parsed: ${flow.intent.amountUsdc} USDC -> ${flow.intent.counterpartyLabel}`,
@@ -114,6 +112,10 @@ function runDryDemo() {
     }
     console.log("");
   }
+
+  console.log(
+    `Summary: ${summary.approvedCount} approved, ${summary.rejectedCount} rejected`,
+  );
 }
 
 function printSpendResult(result: SpendResult) {
