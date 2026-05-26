@@ -1,0 +1,10 @@
+{
+  "name": "@sherpa-agent/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test -vv",
+    "coverage": "forge coverage"
+  }
+}
