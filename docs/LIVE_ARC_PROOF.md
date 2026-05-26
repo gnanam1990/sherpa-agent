@@ -46,13 +46,13 @@ COUNTERPARTY_BLOCKED
 
 ```text
 Production dashboard:
-https://sherpa-agent.vercel.app
+https://sherpa-agent-mu.vercel.app
 
 Immutable production deployment:
-https://sherpa-agent-9kt69m16k-gnanam1990s-projects.vercel.app
+https://sherpa-agent-43y7finkc-gnanam1990s-projects.vercel.app
 
-Preview deployment:
-https://sherpa-agent-lcs8i8g5g-gnanam1990s-projects.vercel.app
+Vercel inspection:
+https://vercel.com/gnanam1990s-projects/sherpa-agent/5zpAsQa1Tmt43PcUzyXbnWENta9B
 ```
 
 The dashboard build is configured with:
