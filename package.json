@@ -5,9 +5,9 @@
   "description": "Smart-contract spend guardrails for autonomous agents on Arc Testnet with x402-aware policy checks.",
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm -r test",
-    "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint",
+    "test": "pnpm build && pnpm -r test",
+    "typecheck": "pnpm build && pnpm -r typecheck",
+    "lint": "pnpm build && pnpm -r lint",
     "wallets:demo": "tsx scripts/create-demo-wallets.ts",
     "arc:check": "tsx scripts/check-arc.ts",
     "live:ready": "tsx scripts/live-readiness.ts",
